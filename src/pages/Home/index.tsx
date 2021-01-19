@@ -7,7 +7,9 @@ import {
   Modal,
   TextInput,
   Dimensions,
+  Image,
 } from 'react-native';
+const configIcon = require('../../assets/config.png');
 
 const {width, height} = Dimensions.get('window');
 
@@ -15,6 +17,7 @@ const Home: React.FC = () => {
   const [tempWeight, setTempWeight] = useState<string>('0');
   const [weight, setWeight] = useState<number>(0);
   const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [history, setHistory] = useState([]);
 
   const defineWeight = () => {
     setModalOpen(!modalOpen);
@@ -34,6 +37,7 @@ const Home: React.FC = () => {
           <TextInput
             style={styles.modalInput}
             keyboardType="number-pad"
+            value={tempWeight}
             onChangeText={(e) => setTempWeight(e)}
           />
           <View style={styles.buttonContainer}>
@@ -50,16 +54,23 @@ const Home: React.FC = () => {
           </View>
         </View>
       </Modal>
-      <TouchableOpacity
-        onPress={() => {
-          setModalOpen(!modalOpen);
-        }}>
-        <Text>Open</Text>
-        <View>
-          <Text>Meu peso: {weight}</Text>
-          <Text> Quantidade de água: {weight * 35}ml</Text>
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => setModalOpen(!modalOpen)}>
+          <Image source={configIcon} style={styles.configIcon} />
+        </TouchableOpacity>
+      </View>
+      <View style={styles.body}>
+        <View style={styles.weightContainer}>
+          <Text style={styles.weightLabel}>Meu peso</Text>
+          <View style={styles.weightValueContainer}>
+            <Text style={styles.weightValue}>{weight}</Text>
+            <Text>Kg</Text>
+          </View>
         </View>
-      </TouchableOpacity>
+        <View>
+          <Text> Quantidade de água: {(weight * 35) / 1000} Litros</Text>
+        </View>
+      </View>
     </View>
   );
 };
@@ -78,8 +89,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#ffffff3a',
   },
+  weightContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  weightValueContainer: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+  },
   modal: {
-    margin: 50,
+    marginTop: 180,
+    marginHorizontal: 50,
     height: 200,
     borderRadius: 5,
     padding: 20,
@@ -106,6 +126,31 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderWidth: 0.5,
     borderRadius: 5,
+  },
+  header: {
+    width: '100%',
+    height: '10%',
+    paddingTop: 50,
+    paddingHorizontal: 20,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  configIcon: {
+    width: 48,
+    height: 48,
+  },
+  body: {
+    height: '90%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  weightLabel: {},
+  weightValue: {
+    fontSize: 128,
+    fontWeight: 'bold',
+  },
+  weightUnit: {
+    top: 50,
   },
 });
 
